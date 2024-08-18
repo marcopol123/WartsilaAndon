@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        select, input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        select {
+            width: 180px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .logout-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="container">
+    <img src="../static/images/wartsila_logo.webp" alt="Wartsila Logo" class="logo">
+    <h2>Submit issue</h2>
+    <form id="requestForm">
+        <div class="form-group">
+            <label for="office">Send to:</label>
+            <select name="office" id="office" required>
+                <option value="Tools">Tools office</option>
+                <option value="Quality">Quality office</option>
+                <option value="Product">Product office</option>
+                <option value="Logistics">Logistics department</option>
+            </select>
+        </div>
+
+        <label for="operatorMsg">Reason:</label>
+        <input type="text" id="operatorMsg" name="operatorMsg"><br><br>
+
+        <div class="button-container">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <div class="button-container logout-button">
+        <button id="logoutButton">Logout</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('requestForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const office = document.getElementById('office').value;
+        const operatorMsg = document.getElementById('operatorMsg').value;
+        const accessToken = localStorage.getItem('access_token');
+
+        if (!accessToken) {
+            console.error('Access Token not found');
+            return;
+        }
+
+        fetch('/submit_request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                recipient: office,
+                operatorMsg: operatorMsg
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.msg === "Logout successful") {
+                    localStorage.removeItem('access_token');
+                    window.location.href = data.redirect_url; // Works because /login_page does not require JWT
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+</body>
+</html>

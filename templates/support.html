@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopfloor support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+        label {
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        select {
+            width: 50px; /* Dropdown menu width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            width: 500px; /* Text box width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="checkbox"] {
+            margin-left: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .logout-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="../static/images/wartsila_logo.webp" alt="Wartsila Logo" class="logo">
+    <h2>Support requests for
+        {% if office == 'Logistics' %}
+            {{ office + ' Department' }}
+        {% else %}
+            {{ office + ' Office' }}
+        {% endif %}
+    </h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Station</th>
+            <th>Operator Message</th>
+            <th>Support Message</th>
+            <th>Submission Timestamp</th>
+            <th>Handling Timestamp</th>
+            <th>Completion Timestamp</th>
+        </tr>
+        {% for request in requests %}
+            <tr>
+                <td>{{ request.ID }}</td>
+                <td>{{ request.Station }}</td>
+                <td>{{ request.OperatorMsg }}</td>
+                <td>{{ request.SupportMsg }}</td>
+                <td>{{ request.SubmTime }}</td>
+                <td>{{ request.HandlTime }}</td>
+                <td>{{ request.ComplTime }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Update Request</h2>
+    <form id="updateRequestForm">
+        <div class="form-group">
+            <label for="requestId">Select Request ID:</label>
+            <select id="requestId" name="requestId">
+                {% for request in requests %}
+                    <option value="{{ request.ID }}">{{ request.ID }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="supportMsg">Support Message:</label>
+            <input type="text" id="supportMsg" name="supportMsg">
+        </div>
+
+        <div class="form-group">
+            <label for="takenInCharge">Taken in Charge:</label>
+            <input type="checkbox" id="takenInCharge" name="takenInCharge">
+        </div>
+
+        <div class="form-group">
+            <label for="resolved">Completion Timestamp:</label>
+            <input type="checkbox" id="resolved" name="resolved">
+        </div>
+
+        <div class="button-container">
+            <button type="submit">Update request</button>
+        </div>
+    </form>
+    <div class="button-container logout-button">
+        <button id="logoutButton">Logout</button>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    document.getElementById('updateRequestForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const requestId = document.getElementById('requestId').value;
+        const supportMsg = document.getElementById('supportMsg').value;
+        const takenInCharge = document.getElementById('takenInCharge').checked;
+        const resolved = document.getElementById('resolved').checked;
+
+        const accessToken = localStorage.getItem('access_token');
+
+        if (!accessToken) {
+            console.error('Access Token not found');
+            return;
+        }
+
+        fetch('/update_request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                requestId: requestId,
+                supportMsg: supportMsg,
+                takenInCharge: takenInCharge,
+                resolved: resolved
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.msg);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
+    fetch('/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.msg === "Logout successful") {
+            localStorage.removeItem('access_token');
+            window.location.href = data.redirect_url; // Works because /login_page does not require JWT
+        } else {
+            console.error('Logout failed');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+</script>
+
+</body>
+</html>

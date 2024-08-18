@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+            text-align: center;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .traffic-light-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .traffic-light {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px;
+        }
+        .traffic-light-box {
+            background-color: #3b3b3b;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .light {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #555;
+            margin: 10px 0;
+        }
+        .green {
+            background-color: #11ab03;
+        }
+        .yellow {
+            background-color: #ffb114;
+        }
+        .red {
+            background-color: #d90d22;
+        }
+        .station-info {
+            text-align: center;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="../static/images/wartsila_logo.webp" alt="Wartsila Logo" class="logo">
+    <div class="traffic-light-container">
+        <div class="traffic-light">
+            <h2>Station 1</h2>
+            <div id="station1" class="traffic-light-box">
+                <div class="light" id="station1-green"></div>
+                <div class="light" id="station1-yellow"></div>
+                <div class="light" id="station1-red"></div>
+            </div>
+            <p class="station-info"><span id="station1-status"></span></p>
+            <p class="station-info"><span id="station1-duration"></span></p>
+        </div>
+
+        <div class="traffic-light">
+            <h2>Station 2</h2>
+            <div id="station2" class="traffic-light-box">
+                <div class="light" id="station2-green"></div>
+                <div class="light" id="station2-yellow"></div>
+                <div class="light" id="station2-red"></div>
+            </div>
+            <p class="station-info"><span id="station2-status"></span></p>
+            <p class="station-info"><span id="station2-duration"></span></p>
+        </div>
+
+        <div class="traffic-light">
+            <h2>Station 3</h2>
+            <div id="station3" class="traffic-light-box">
+                <div class="light" id="station3-green"></div>
+                <div class="light" id="station3-yellow"></div>
+                <div class="light" id="station3-red"></div>
+            </div>
+            <p class="station-info"><span id="station3-status"></span></p>
+            <p class="station-info"><span id="station3-duration"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateStatus() {
+        fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                updateTrafficLight('station1', data.station1);
+                updateTrafficLight('station2', data.station2);
+                updateTrafficLight('station3', data.station3);
+            });
+    }
+
+    function updateTrafficLight(stationId, status) {
+        const greenLight = document.getElementById(`${stationId}-green`);
+        const yellowLight = document.getElementById(`${stationId}-yellow`);
+        const redLight = document.getElementById(`${stationId}-red`);
+        const statusElement = document.getElementById(`${stationId}-status`);
+        const durationElement = document.getElementById(`${stationId}-duration`);
+
+        greenLight.classList.remove('green');
+        yellowLight.classList.remove('yellow');
+        redLight.classList.remove('red');
+
+        if (status.status === 'Operational') {
+            greenLight.classList.add('green');
+            statusElement.textContent = 'No issue\n';
+            durationElement.textContent = '';
+        } else if (status.status === 'Processing request') {
+            yellowLight.classList.add('yellow');
+            statusElement.textContent = 'Issue taken in charge\n';
+            durationElement.textContent = 'Time inactive: ' + status.inactive_duration;
+        } else if (status.status === 'Issue raised') {
+            redLight.classList.add('red');
+            statusElement.textContent = 'Issue raised\n';
+            durationElement.textContent = 'Time inactive: ' + status.inactive_duration;
+        }
+
+    }
+
+    setInterval(updateStatus, 1000); // Update status every 5 seconds
+    updateStatus(); // Initial call to set the status
+</script>
+
+</body>
+</html>
