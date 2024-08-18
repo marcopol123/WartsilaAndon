@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2c0c754d-c68e-405d-842d-de016c2b1876" name="Changes" comment="Wartsila Andon System v1.0" />
+    <list default="true" id="2c0c754d-c68e-405d-842d-de016c2b1876" name="Changes" comment="Wartsila Andon System v1.0">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/webserver.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,12 +42,12 @@
     &quot;assignee&quot;: &quot;marcopol123&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/marcopol123/WartsilaAndon.git&quot;,
-    &quot;accountId&quot;: &quot;ac4919e0-0196-4f0b-ad70-53457bbaab6f&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/marcopol123/WartsilaAndon",
+    "accountId": "ac4919e0-0196-4f0b-ad70-53457bbaab6f"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -67,6 +70,7 @@
     "Python.monitor.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/poles/OneDrive/Documenti/Prova Wartsila/WartsilaAndon",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -88,9 +92,9 @@
     </key>
   </component>
   <component name="RunManager" selected="Flask server.WartsilaAndon">
-    <configuration name="Flask (server.py)" type="Python.FlaskServer" temporary="true" nameIsGenerated="true">
+    <configuration name="Flask (webserver.py)" type="Python.FlaskServer" temporary="true" nameIsGenerated="true">
       <module name="WartsilaAndon" />
-      <option name="target" value="$PROJECT_DIR$/server.py" />
+      <option name="target" value="$PROJECT_DIR$/webserver.py" />
       <option name="targetType" value="PATH" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,7 +110,7 @@
     </configuration>
     <configuration name="WartsilaAndon" type="Python.FlaskServer">
       <module name="WartsilaAndon" />
-      <option name="target" value="$PROJECT_DIR$/server.py" />
+      <option name="target" value="$PROJECT_DIR$/webserver.py" />
       <option name="targetType" value="PATH" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -156,6 +160,7 @@
       <workItem from="1723970883187" duration="8891000" />
       <workItem from="1723991013564" duration="54000" />
       <workItem from="1723991075539" duration="601000" />
+      <workItem from="1723991694162" duration="528000" />
     </task>
     <task id="LOCAL-00001" summary="Wartsila Andon System v1.0">
       <option name="closed" value="true" />
@@ -237,7 +242,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723990678388</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Wartsila Andon System v1.0">
+      <option name="closed" value="true" />
+      <created>1723991723177</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1723991723177</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

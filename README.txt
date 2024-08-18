@@ -1,5 +1,5 @@
 DATABASE REQUIREMENTS
-A PostgreSQL server must be running with the following settings (can be edited in server.py).
+A PostgreSQL server must be running with the following settings (can be edited in webserver.py).
 A database named 'support_db' will be created automatically.
 - url       127.0.0.1:5432
 - host      'localhost'
